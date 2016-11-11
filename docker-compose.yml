@@ -3,7 +3,8 @@ services:
   twitter:
     build:
       context: .
-    env_file: .env
+    env_file:
+      - .env
   newsfilter:
     image: migrantnewsfilter/newsfilter
     environment:

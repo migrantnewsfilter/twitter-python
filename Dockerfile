@@ -6,4 +6,4 @@ RUN pip install -r /twitter/requirements.txt
 
 WORKDIR /twitter
 
-CMD [ "python", "__main__.py" ]
+CMD [ "python", "-u", "__main__.py" ]

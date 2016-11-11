@@ -30,6 +30,7 @@ def read_and_write(client, resource):
     prepared = (prepare_entry(entry) for entry in resource.stream() if entry.get('id'))
     chunked = chunk(20, prepared)
     for c in chunked:
+        print 'TWITTER: writing tweets to DB'
         requests = [ UpdateOne({ '_id': obj['_id']},
                                { '$setOnInsert': obj }
                                , upsert=True) for obj in c]
@@ -54,4 +55,6 @@ if __name__ == '__main__':
 
     keywords = get_keywords(client)
     resource = twitter_client.stream.statuses.filter.post(track=keywords)
+
+    print 'TWITTER: connected to twitter. Beginning to read tweetz'
     read_and_write(client, resource)
