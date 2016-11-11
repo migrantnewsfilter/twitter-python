@@ -1,0 +1,25 @@
+version: '2'
+services:
+  twitter:
+    build:
+      context: .
+    env_file: .env
+  newsfilter:
+    image: migrantnewsfilter/newsfilter
+    environment:
+      MONGO_HOST: mongodb://mongo:27017
+      FLASK_DEBUG: 1
+    ports:
+      - "5000:5000"
+  alerts:
+    image: migrantnewsfilter/alerts-rss
+    environment:
+      MONGO_HOST: mongodb://mongo:27017
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo:/data/db
+    ports:
+      - "27017:27017"
+volumes:
+  mongo:
