@@ -26,7 +26,7 @@ def chunk(n, it):
     return takewhile(bool, (list(islice(src, n)) for _ in count(0)))
 
 def read_and_write(client, resource):
-    collection = client['newsfilter'].alerts
+    collection = client['newsfilter'].news
     prepared = (prepare_entry(entry) for entry in resource.stream() if entry.get('id'))
     chunked = chunk(20, prepared)
     for c in chunked:
@@ -37,9 +37,9 @@ def read_and_write(client, resource):
 
 
 def get_keywords(client):
-    # TODO: get these from database, combine with feeds data, decide on view for user!
-
-    return 'aegean drown, asylum detention death, asylum seeker death, bay of bengal drown, border death, cadaver inmigrante, canary islands migrant, christmas islands drown, inmigrante muerto, inmigrantes murieron, la bestia muerto, lampedusa death, libya migrant death, libya refugee death, limpopo crocodile, mediterranean migrant dead, migrant death, migrant death, migrant detention death, migrant missing, migrant suicide, migrante muerto, migrants die, migrants drown, migration dead, migration death, migration detention death, migration missing, migration suicide, refugee dead, refugee death, refugee detention death, refugee missing, refugiado muerto, rio bravo ahogado, rio bravo muerto, rio grande death, rio grande drown,  rohingya dead, rohingya drown, sueno americano muerto, sueno americano ahogado'
+    collection = client['newsfilter'].terms
+    words = collection.find_one({ '_id': 'twitter' })
+    return words.get('keywords')
 
 
 if __name__ == '__main__':
