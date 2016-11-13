@@ -3,6 +3,8 @@ services:
   twitter:
     build:
       context: .
+    volumes:
+      - .:/twitter
     env_file:
       - .env
   newsfilter:
