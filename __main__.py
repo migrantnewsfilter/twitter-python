@@ -54,7 +54,7 @@ if __name__ == '__main__':
     )
 
     keywords = get_keywords(client)
-    resource = twitter_client.stream.statuses.filter.post(track='trump, election')
+    resource = twitter_client.stream.statuses.filter.post(track=keywords)
 
     print 'TWITTER: connected to twitter. Beginning to read tweetz'
     read_and_write(client, resource)
