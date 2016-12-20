@@ -4,6 +4,7 @@ import dateutil.parser
 from datetime import datetime
 from birdy.twitter import StreamClient
 from pymongo import MongoClient, UpdateOne
+from indexing_utils import chunk
 
 consumer_token = os.environ.get('T_CONSUMER_TOKEN')
 consumer_secret = os.environ.get('T_CONSUMER_SECRET')
@@ -11,19 +12,19 @@ access_token = os.environ.get('T_ACCESS_TOKEN')
 access_token_secret = os.environ.get('T_TOKEN_SECRET')
 
 def prepare_entry(status):
+    user = status.user.screen_name
+    _id = str(status.id)
+    link = 'https://twitter.com/' + user + '/status/' + _id
     return {
-        '_id': 'tw:' + str(status.id),
+        '_id': 'tw:' + _id,
         'published': dateutil.parser.parse(status.created_at),
         'added': datetime.utcnow(),
         'content': {
-            'author': status.user.screen_name,
+            'link': link,
+            'author': user,
             'body': status.text
         }
     }
-
-def chunk(n, it):
-    src = iter(it)
-    return takewhile(bool, (list(islice(src, n)) for _ in count(0)))
 
 def read_and_write(client, resource):
     collection = client['newsfilter'].news
